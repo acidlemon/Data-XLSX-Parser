@@ -98,11 +98,21 @@ sub cell_style {
 
 sub cell_type_from_style {
     my ($self, $style) = @_;
+
+    if ($style->{numFmt} > scalar @{ BUILTIN_NUM_FMTS() }) {
+        return $self->{_num_fmt}{ $style->{numFmt} }{_type} // undef;
+    }
+
     BUILTIN_NUM_FMTS->[ $style->{numFmt} ][BUILTIN_TYPE];
 }
 
 sub cell_format_from_style {
     my ($self, $style) = @_;
+
+    if ($style->{numFmt} > scalar @{ BUILTIN_NUM_FMTS() }) {
+        return $self->{_num_fmt}{ $style->{numFmt} }{formatCode} // undef;
+    }
+
     BUILTIN_NUM_FMTS->[ $style->{numFmt} ][BUILTIN_FMT];
 }
 
@@ -123,6 +133,18 @@ sub _start {
             exists $attrs{applyNumberFormat} ? ( applyNumFmt => $attrs{applyNumberFormat} ) : (),
         };
     }
+    elsif ($name eq 'numFmts') {
+        $self->{_is_num_fmts} = 1;
+    }
+    elsif ($self->{_is_num_fmts} and $name eq 'numFmt'){
+        $self->{_current_numfmt} = {
+            numFmtId   => $attrs{numFmtId},
+            exists $attrs{formatCode} ? (
+                formatCode => $attrs{formatCode},
+                _type      => $self->_parse_format_code_type($attrs{formatCode}),
+            ) : (),
+        };
+    }
 }
 
 sub _end {
@@ -134,6 +156,31 @@ sub _end {
     elsif ($self->{_current_style} and $name eq 'xf') {
         push @{ $self->{_number_formats } }, delete $self->{_current_style};
     }
+    elsif ($name eq 'numFmts') {
+        $self->{_is_num_fmts} = 0;
+    }
+    elsif ($self->{_current_numfmt} and $name eq 'numFmt') {
+        my $id = $self->{_current_numfmt}{numFmtId};
+        $self->{_num_fmt}{ $id } = delete $self->{_current_numfmt};
+    }
+}
+
+sub _parse_format_code_type {
+    my ($self, $format_code) = @_;
+
+    my $type;
+    if ($format_code =~ /(y|m|d|h|s)/) {
+        $type = 'datetime.';
+
+        $type .= 'date' if $format_code =~ /(y|d)/;
+        $type .= 'time' if $format_code =~ /(h|s)/;
+
+        $type .= 'date' if $type eq 'datetime.'; # assume as date only specified 'm'
+    } else {
+        $type = 'unicode';
+    }
+
+    return $type;
 }
 
 1;

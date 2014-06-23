@@ -5,6 +5,8 @@ use warnings;
 use File::Temp;
 use XML::Parser::Expat;
 use Archive::Zip ();
+use Time::Piece ();
+use Scalar::Util ();
 
 use constant {
     STYLE_IDX          => 'i',
@@ -64,7 +66,7 @@ sub _start {
     }
     elsif ($name eq 'c') {
         $self->{_cell} = {
-            STYLE_IDX() => $attrs{ STYLE_IDX() },
+            STYLE_IDX() => $attrs{ STYLE() },
             TYPE()      => $attrs{ TYPE() },
             REF()       => $attrs{ REF() },
             COLUMN()    => scalar(@{ $self->{_current_row} }) + 1,
@@ -102,13 +104,18 @@ sub _end {
             $self->{_styles}->cell_type_from_style($c->{ STYLE() });
 
         my $v = $c->{ VALUE() };
-        if (defined $v and $c->{ FMT() } =~ /^datetime\.(date)?(time)?$/) {
-            # datetime
-            warn 'datetime';
+
+        if (defined $v and defined $c->{ FMT() } and
+            $c->{ FMT() } =~ /^datetime\.(date)?(time)?$/) {
+            $v = $self->_convert_serial_time($v);
+            $c->{ VALUE() } = $v;
         }
         else {
             if (!defined $v) {
                 $c->{ VALUE() } = '';
+            }
+            elsif (Scalar::Util::looks_like_number($v)) {
+                $c->{ VALUE() } = $v + 0;
             }
             elsif ($cell_type ne 'unicode') {
                 warn 'not unicode';
@@ -124,6 +131,14 @@ sub _end {
     elsif ($name eq 'v') {
         $self->{_is_value} = 0;
     }
+}
+
+sub _convert_serial_time {
+    my ($self, $serial_time) = @_;
+
+    # UNIX Epoch(1970/1/1 00:00:00) is 25569.0
+    my $epoch = ($serial_time - 25569) * 24 * 60 * 60;
+    return Time::Piece::gmtime($epoch);
 }
 
 sub _char {
