@@ -6,6 +6,7 @@ use File::Temp;
 use XML::Parser::Expat;
 use Archive::Zip ();
 use Time::Piece ();
+use Scalar::Util ();
 
 use constant {
     STYLE_IDX          => 'i',
@@ -112,6 +113,9 @@ sub _end {
         else {
             if (!defined $v) {
                 $c->{ VALUE() } = '';
+            }
+            elsif (Scalar::Util::looks_like_number($v)) {
+                $c->{ VALUE() } = $v + 0;
             }
             elsif ($cell_type ne 'unicode') {
                 warn 'not unicode';

@@ -172,15 +172,10 @@ sub _parse_format_code_type {
     if ($format_code =~ /(y|m|d|h|s)/) {
         $type = 'datetime.';
 
-        if ($format_code =~ /(y|d)/) {
-            $type .= 'date';
-        }
-        if ($format_code =~ /(h|s)/) {
-            $type .= 'time';
-        }
-        if ($type eq 'datetime.') {
-            $type .= 'date'; # mしかないのはdateにしとく
-        }
+        $type .= 'date' if $format_code =~ /(y|d)/;
+        $type .= 'time' if $format_code =~ /(h|s)/;
+
+        $type .= 'date' if $type eq 'datetime.'; # assume as date only specified 'm'
     } else {
         $type = 'unicode';
     }

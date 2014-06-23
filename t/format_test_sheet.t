@@ -36,6 +36,7 @@ is $cells->[6][1], Time::Piece::gmtime(1400198400); # 2014/05/16 00:00:00
 is $cells->[7][1], Time::Piece::gmtime(1400230800); # 2014/05/16 09:00:00
 is $cells->[8][1], 'string';
 is $cells->[9][1], '文字列';
+is $cells->[10][1], 125702689;
 
 
 done_testing;
