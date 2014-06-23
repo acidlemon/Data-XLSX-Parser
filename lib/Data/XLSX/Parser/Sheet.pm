@@ -64,7 +64,7 @@ sub _start {
     }
     elsif ($name eq 'c') {
         $self->{_cell} = {
-            STYLE_IDX() => $attrs{ STYLE_IDX() },
+            STYLE_IDX() => $attrs{ STYLE() },
             TYPE()      => $attrs{ TYPE() },
             REF()       => $attrs{ REF() },
             COLUMN()    => scalar(@{ $self->{_current_row} }) + 1,
