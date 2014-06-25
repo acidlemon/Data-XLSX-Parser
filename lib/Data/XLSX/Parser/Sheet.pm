@@ -105,10 +105,11 @@ sub _end {
 
         my $v = $c->{ VALUE() };
 
-        if (defined $v and defined $c->{ FMT() } and
+        if ($v and defined $c->{ FMT() } and
             $c->{ FMT() } =~ /^datetime\.(date)?(time)?$/) {
-            $v = $self->_convert_serial_time($v);
-            $c->{ VALUE() } = $v;
+            if (Scalar::Util::looks_like_number($v)) {
+                $c->{ VALUE() } = $self->_convert_serial_time($v);
+            }
         }
         else {
             if (!defined $v) {
@@ -118,7 +119,7 @@ sub _end {
                 $c->{ VALUE() } = $v + 0;
             }
             elsif ($cell_type ne 'unicode') {
-                warn 'not unicode';
+                # warn 'not unicode: ' . $cell_type;
                 $c->{ VALUE() } = $v;
             }
         }
