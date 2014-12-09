@@ -19,7 +19,7 @@ sub new {
         _archive           => undef,
         _workbook          => undef,
         _shared_strings    => undef,
-        _relation_ships    => undef,
+        _relationships    => undef,
     }, $class;
 }
 
@@ -50,7 +50,7 @@ sub styles {
 
 sub relationships {
     my ($self) = @_;
-    $self->{_relation_ships} ||= Data::XLSX::Parser::Relationships->new($self->{_archive});
+    $self->{_relationships} ||= Data::XLSX::Parser::Relationships->new($self->{_archive});
 }
 
 sub sheet {

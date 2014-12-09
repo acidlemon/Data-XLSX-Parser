@@ -10,7 +10,7 @@ sub new {
     my ($class, $archive) = @_;
 
     my $self = bless {
-        _relation_ships => {}, # { <rid> => {Target => "...", Type => "..."}, ... }
+        _relationships => {}, # { <rid> => {Target => "...", Type => "..."}, ... }
     }, $class;
 
     my $fh = File::Temp->new( SUFFIX => '.xml.rels');
@@ -32,11 +32,11 @@ sub new {
 sub relation_target {
     my ($self, $rid) = @_;
 
-    unless (exists $self->{_relation_ships}->{$rid}) {
+    unless (exists $self->{_relationships}->{$rid}) {
         return;
     }
 
-    my $relation = $self->{_relation_ships}->{$rid};
+    my $relation = $self->{_relationships}->{$rid};
 
     return $relation->{Target};
 }
@@ -47,7 +47,7 @@ sub _start {
     $self->{_in_relationships} = 1 if $name eq "Relationships";
 
     if ($self->{_in_relationships} && $name eq "Relationship" && $attrs{Id}) {
-        $self->{_relation_ships}->{$attrs{Id}} = {
+        $self->{_relationships}->{$attrs{Id}} = {
             Target => $attrs{Target},
             Type   => $attrs{Type},
         };
