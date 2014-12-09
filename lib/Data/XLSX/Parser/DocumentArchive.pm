@@ -37,4 +37,9 @@ sub styles {
     $self->{_zip}->memberNamed('xl/styles.xml');
 }
 
+sub relationships {
+    my ($self) = @_;
+    $self->{_zip}->memberNamed('xl/_rels/workbook.xml.rels');
+}
+
 1;

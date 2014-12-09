@@ -9,6 +9,7 @@ use Data::XLSX::Parser::Workbook;
 use Data::XLSX::Parser::SharedStrings;
 use Data::XLSX::Parser::Styles;
 use Data::XLSX::Parser::Sheet;
+use Data::XLSX::Parser::Relationships;
 
 sub new {
     my ($class) = @_;
@@ -18,6 +19,7 @@ sub new {
         _archive           => undef,
         _workbook          => undef,
         _shared_strings    => undef,
+        _relationships    => undef,
     }, $class;
 }
 
@@ -46,9 +48,27 @@ sub styles {
     $self->{_styles} ||= Data::XLSX::Parser::Styles->new($self->{_archive});
 }
 
+sub relationships {
+    my ($self) = @_;
+    $self->{_relationships} ||= Data::XLSX::Parser::Relationships->new($self->{_archive});
+}
+
 sub sheet {
     my ($self, $sheet_id) = @_;
-    $self->{_sheet} ||= Data::XLSX::Parser::Sheet->new($self, $self->{_archive}, $sheet_id);
+    $self->{_sheet}->{$sheet_id} ||= Data::XLSX::Parser::Sheet->new($self, $self->{_archive}, $sheet_id);
+}
+
+sub sheet_by_rid {
+    my ($self, $rid) = @_;
+
+    my $target = $self->relationships->relation_target($rid);
+    unless ($target) {
+        return;
+    }
+
+    if ($target =~ /worksheets\/sheet(\d+).xml/) {
+        return $self->sheet($1);
+    }
 }
 
 sub _row_event {
