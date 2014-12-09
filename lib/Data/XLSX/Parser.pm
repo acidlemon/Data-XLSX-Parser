@@ -55,7 +55,7 @@ sub relationships {
 
 sub sheet {
     my ($self, $sheet_id) = @_;
-    $self->{_sheet} ||= Data::XLSX::Parser::Sheet->new($self, $self->{_archive}, $sheet_id);
+    $self->{_sheet}->{$sheet_id} ||= Data::XLSX::Parser::Sheet->new($self, $self->{_archive}, $sheet_id);
 }
 
 sub sheet_by_rid {
