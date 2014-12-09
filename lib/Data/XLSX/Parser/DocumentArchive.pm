@@ -37,4 +37,20 @@ sub styles {
     $self->{_zip}->memberNamed('xl/styles.xml');
 }
 
+sub relationships {
+    my ($self) = @_;
+    $self->{_zip}->memberNamed('xl/_rels/workbook.xml.rels');
+}
+
+sub sheet_id_by_rid {
+    my ($self, $rid) = @_;
+
+    my $target = $self->relationships->relation_target($rid);
+    unless ($target) {
+        return;
+    }
+
+    return $target =~ /worksheets\/sheet(\d+).xml/ ? $1 : undef;
+}
+
 1;
