@@ -4,3 +4,12 @@ blib/
 inc/
 test.pl
 private-*
+/Data-XLSX-Parser-*
+/.build
+/_build_params
+/Build
+/Build.bat
+!Build/
+!META.json
+!LICENSE
+.DS_Store
