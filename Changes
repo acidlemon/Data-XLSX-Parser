@@ -2,6 +2,10 @@ Revision history for Perl extension Data-XLSX-Parser
 
 {{$NEXT}}
 
+0.11 2014-12-18T01:55:21Z
+
+    - change cpanfile (perl >= 5.010)
+
 0.10 2014-12-15T17:31:05Z
 
     - initial version
