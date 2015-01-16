@@ -169,7 +169,9 @@ sub _parse_format_code_type {
     my ($self, $format_code) = @_;
 
     my $type;
-    if ($format_code =~ /(y|m|d|h|s)/) {
+    if ($format_code =~ /;/) {
+        $type = 'unicode';
+    } elsif ($format_code =~ /(y|m|d|h|s)/) {
         $type = 'datetime.';
 
         $type .= 'date' if $format_code =~ /(y|d)/;
