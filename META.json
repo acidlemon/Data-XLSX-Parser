@@ -65,7 +65,7 @@
          "web" : "https://github.com/acidlemon/Data-XLSX-Parser"
       }
    },
-   "version" : "0.12",
+   "version" : "0.13",
    "x_contributors" : [
       "Masatoshi Kawazoe (acidlemon) <kawazoe-masatoshi@kayac.com>",
       "Shinichiro Sei <sei@kayac.com>",
