@@ -38,6 +38,11 @@ is $cells->[8][1], 'string';
 is $cells->[9][1], '文字列';
 is $cells->[10][1], 125702689;
 is $cells->[11][1], 4.5;
+is $cells->[12][1], '007';
+is $cells->[13][1], '07';
+is $cells->[14][1], '00.7';
+is $cells->[15][1], '0.7';
+is $cells->[16][1], '70.0';
 
 
 done_testing;
