@@ -2,6 +2,8 @@ Revision history for Perl extension Data-XLSX-Parser
 
 {{$NEXT}}
 
+0.14 2015-12-21T12:19:11Z
+
     - bug fix: revised implements for 0.13_01
     - notice:  Data::XLSX::Parser->sheet is now obsolete.
 

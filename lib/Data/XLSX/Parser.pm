@@ -2,7 +2,7 @@ package Data::XLSX::Parser;
 use strict;
 use warnings;
 
-our $VERSION = '0.13_01';
+our $VERSION = '0.14';
 
 use Data::XLSX::Parser::DocumentArchive;
 use Data::XLSX::Parser::Workbook;
