@@ -106,7 +106,7 @@ Data::XLSX::Parser - faster XLSX parser
     $parser->open('foo.xlsx');
     
     # parse sheet with sheet name
-    $parser->sheet( $parser->workbook->sheet_id( 'Sheet1' ) );
+    $parser->sheet_by_rid( $parser->workbook->sheet_id( 'Sheet1' ) );
     
     # .. or parse sheet with r:Id
     $parser->sheet_by_rid(3);

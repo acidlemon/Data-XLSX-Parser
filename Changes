@@ -2,6 +2,9 @@ Revision history for Perl extension Data-XLSX-Parser
 
 {{$NEXT}}
 
+    - bug fix: revised implements for 0.13_01
+    - notice:  Data::XLSX::Parser->sheet is now obsolete.
+
 0.13_01 2015-12-21T11:13:05Z
 
     - bug fix: Google spreadsheet exports unexpected filename (workaround release) 
