@@ -11,6 +11,8 @@ use Data::XLSX::Parser::Styles;
 use Data::XLSX::Parser::Sheet;
 use Data::XLSX::Parser::Relationships;
 
+my $workbook_schema = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet';
+
 sub new {
     my ($class) = @_;
 
@@ -55,20 +57,22 @@ sub relationships {
 
 sub sheet {
     my ($self, $sheet_id) = @_;
+    warn 'Data::XLSX::Parser->sheet is obsolete. This method will remove feature release.';
     $self->{_sheet}->{$sheet_id} ||= Data::XLSX::Parser::Sheet->new($self, $self->{_archive}, $sheet_id);
 }
 
 sub sheet_by_rid {
     my ($self, $rid) = @_;
 
-    my $target = $self->relationships->relation_target($rid);
-    unless ($target) {
+    my $relation = $self->relationships->relation($rid);
+    unless ($relation) {
         return;
     }
 
-    if ($target =~ /worksheets\/sheet(\d+)?.xml/) {
-        my $sheet_id = $1 ? $1 : "";
-        return $self->sheet($sheet_id);
+    if ($relation->{Type} eq $workbook_schema) {
+        my $target = $relation->{Target};
+        $self->{_sheet}->{$rid} ||=
+            Data::XLSX::Parser::Sheet->new($self, $self->{_archive}, $target);
     }
 }
 
