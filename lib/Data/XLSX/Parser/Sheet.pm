@@ -60,7 +60,6 @@ sub new {
     $self;
 }
 
-
 sub _start {
     my ($self, $parser, $name, %attrs) = @_;
 
