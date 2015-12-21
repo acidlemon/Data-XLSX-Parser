@@ -57,6 +57,7 @@ sub relationships {
 
 sub sheet {
     my ($self, $sheet_id) = @_;
+    warn 'Data::XLSX::Parser->sheet is obsolete. This method will remove feature release.';
     $self->{_sheet}->{$sheet_id} ||= Data::XLSX::Parser::Sheet->new($self, $self->{_archive}, $sheet_id);
 }
 
