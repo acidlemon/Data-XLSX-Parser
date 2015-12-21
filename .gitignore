@@ -13,3 +13,5 @@ private-*
 !META.json
 !LICENSE
 .DS_Store
+local/
+cpanfile.snapshot

@@ -4,7 +4,7 @@
       "Daisuke Murase <typester@cpan.org>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Minilla/v2.3.0, CPAN::Meta::Converter version 2.143240",
+   "generated_by" : "Minilla/v3.0.1, CPAN::Meta::Converter version 2.150005",
    "license" : [
       "unknown"
    ],
@@ -71,5 +71,6 @@
       "Shinichiro Sei <sei@kayac.com>",
       "Masatoshi Kawazoe <github@beatsync.net>",
       "Masatoshi Kawazoe (acidlemon) <acidlemon@beatsync.net>"
-   ]
+   ],
+   "x_serialization_backend" : "JSON::PP version 2.27203"
 }
