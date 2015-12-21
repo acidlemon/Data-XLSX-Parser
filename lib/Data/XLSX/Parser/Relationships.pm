@@ -41,6 +41,16 @@ sub relation_target {
     return $relation->{Target};
 }
 
+sub relation {
+    my ($self, $rid) = @_;
+
+    unless (exists $self->{_relationships}->{$rid}) {
+        return;
+    }
+
+    return $self->{_relationships}->{$rid};
+}
+
 sub _start {
     my ($self, $parser, $name, %attrs) = @_;
 

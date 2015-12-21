@@ -23,8 +23,8 @@ sub workbook {
 }
 
 sub sheet {
-    my ($self, $id) = @_;
-    $self->{_zip}->memberNamed(sprintf 'xl/worksheets/sheet%s.xml', $id);
+    my ($self, $path) = @_;
+    $self->{_zip}->memberNamed(sprintf 'xl/%s', $path);
 }
 
 sub shared_strings {

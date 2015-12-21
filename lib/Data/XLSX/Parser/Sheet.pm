@@ -21,7 +21,12 @@ use constant {
 };
 
 sub new {
-    my ($class, $doc, $archive, $sheet_id) = @_;
+    my ($class, $doc, $archive, $sheet_id_or_filepath) = @_;
+
+    my $filepath = $sheet_id_or_filepath;
+    if (Scalar::Util::looks_like_number($sheet_id_or_filepath)) {
+        $filepath = sprintf 'worksheets/sheet%d.xml', $sheet_id_or_filepath;
+    }
 
     my $self = bless {
         _document => $doc,
@@ -40,7 +45,7 @@ sub new {
 
     my $fh = File::Temp->new( SUFFIX => '.xml' );
 
-    my $handle = $archive->sheet($sheet_id);
+    my $handle = $archive->sheet($filepath);
     die 'Failed to write temporally file: ', $fh->filename
         unless $handle->extractToFileNamed($fh->filename) == Archive::Zip::AZ_OK;
 
@@ -50,10 +55,11 @@ sub new {
         End   => sub { $self->_end(@_) },
         Char  => sub { $self->_char(@_) },
     );
-    $parser->parse($fh);    
+    $parser->parse($fh);
 
     $self;
 }
+
 
 sub _start {
     my ($self, $parser, $name, %attrs) = @_;
