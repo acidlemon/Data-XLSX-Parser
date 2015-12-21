@@ -2,6 +2,10 @@ Revision history for Perl extension Data-XLSX-Parser
 
 {{$NEXT}}
 
+0.13_01 2015-12-21T11:13:05Z
+
+    - bug fix: Google spreadsheet exports unexpected filename (workaround release) 
+
 0.13 2015-01-16T11:50:44Z
 
     - improvement: determine value type more accurately
