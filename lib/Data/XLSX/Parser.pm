@@ -66,8 +66,9 @@ sub sheet_by_rid {
         return;
     }
 
-    if ($target =~ /worksheets\/sheet(\d+).xml/) {
-        return $self->sheet($1);
+    if ($target =~ /worksheets\/sheet(\d+)?.xml/) {
+        my $sheet_id = $1 ? $1 : "";
+        return $self->sheet($sheet_id);
     }
 }
 
