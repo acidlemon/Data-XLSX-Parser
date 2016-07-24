@@ -145,6 +145,8 @@ sub _convert_serial_time {
 
     # UNIX Epoch(1970/1/1 00:00:00) is 25569.0
     my $epoch = ($serial_time - 25569) * 24 * 60 * 60;
+    # round to nearest second to compensate for floating point errors
+    $epoch = $epoch > 0 ? int( $epoch + 0.5) : int( $epoch - 0.5);
     return Time::Piece::gmtime($epoch);
 }
 
