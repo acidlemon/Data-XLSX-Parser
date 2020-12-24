@@ -5,6 +5,7 @@ use warnings;
 use XML::Parser::Expat;
 use Archive::Zip ();
 use File::Temp;
+use Carp;
 
 sub new {
     my ($class, $archive) = @_;
@@ -17,13 +18,13 @@ sub new {
         _buf       => '',
     }, $class;
 
-    my $fh = File::Temp->new( SUFFIX => '.xml' );
+    my $fh = File::Temp->new( SUFFIX => '.xml' ) or confess "couldn't create tempfile $!";
 
     my $handle = $archive->shared_strings or return $self;
-    die 'Failed to write temporally file: ', $fh->filename
+    confess 'Failed to write temporally file: ', $fh->filename
         unless $handle->extractToFileNamed($fh->filename) == Archive::Zip::AZ_OK;
 
-    my $parser = XML::Parser::Expat->new;
+    my $parser = XML::Parser::Expat->new(Namespaces=>1);
     $parser->setHandlers(
         Start => sub { $self->_start(@_) },
         End   => sub { $self->_end(@_) },

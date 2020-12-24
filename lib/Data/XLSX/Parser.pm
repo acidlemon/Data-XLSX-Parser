@@ -2,7 +2,7 @@ package Data::XLSX::Parser;
 use strict;
 use warnings;
 
-our $VERSION = '0.14';
+our $VERSION = '0.15';
 
 use Data::XLSX::Parser::DocumentArchive;
 use Data::XLSX::Parser::Workbook;
@@ -10,6 +10,7 @@ use Data::XLSX::Parser::SharedStrings;
 use Data::XLSX::Parser::Styles;
 use Data::XLSX::Parser::Sheet;
 use Data::XLSX::Parser::Relationships;
+use Carp;
 
 my $workbook_schema = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet';
 
@@ -27,7 +28,7 @@ sub new {
 
 sub add_row_event_handler {
     my ($self, $handler) = @_;
-    push @{ $self->{_row_event_handler} }, $handler;    
+    push @{ $self->{_row_event_handler} }, $handler;
 }
 
 sub open {
@@ -55,9 +56,8 @@ sub relationships {
     $self->{_relationships} ||= Data::XLSX::Parser::Relationships->new($self->{_archive});
 }
 
-sub sheet {
+sub sheet_by_id {
     my ($self, $sheet_id) = @_;
-    warn 'Data::XLSX::Parser->sheet is obsolete. This method will remove feature release.';
     $self->{_sheet}->{$sheet_id} ||= Data::XLSX::Parser::Sheet->new($self, $self->{_archive}, $sheet_id);
 }
 
@@ -68,7 +68,6 @@ sub sheet_by_rid {
     unless ($relation) {
         return;
     }
-
     if ($relation->{Type} eq $workbook_schema) {
         my $target = $relation->{Target};
         $self->{_sheet}->{$rid} ||=
@@ -81,10 +80,9 @@ sub _row_event {
 
     my $row_vals = [map { $_->{v} } @$row];
     for my $handler (@{ $self->{_row_event_handler} }) {
-        $handler->($row_vals);
+        $handler->($row_vals, $row);
     }
 }
-
 1;
 
 __END__

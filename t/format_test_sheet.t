@@ -25,7 +25,7 @@ $parser->add_row_event_handler(sub {
     push @$cells, $row;
 });
 
-$parser->sheet(1);
+$parser->sheet_by_id(1);
 
 is $cells->[1][1], 1;
 is $cells->[2][1], -3;

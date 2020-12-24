@@ -1,6 +1,7 @@
 package Data::XLSX::Parser::DocumentArchive;
 use strict;
 use warnings;
+use Carp;
 
 use Archive::Zip;
 
@@ -9,7 +10,7 @@ sub new {
 
     my $zip = Archive::Zip->new;
     if ($zip->read($filename) != Archive::Zip::AZ_OK) {
-        die "Cannot open file: $filename";
+        confess "Cannot open file: $filename";
     }
 
     bless {
@@ -24,7 +25,9 @@ sub workbook {
 
 sub sheet {
     my ($self, $path) = @_;
-    $self->{_zip}->memberNamed(sprintf 'xl/%s', $path);
+	# only add xl/ if not already there, as some tools add absolute paths in relations
+	$path = sprintf ('xl/%s', $path) unless $path =~ /^xl\//;
+    $self->{_zip}->memberNamed($path);
 }
 
 sub shared_strings {
