@@ -4,34 +4,31 @@ Data::XLSX::Parser - faster XLSX parser
 
 # SYNOPSIS
 
-    use Data::Dumper;
+   use Data::Dumper;
     use Data::XLSX::Parser;
     
     my $parser = Data::XLSX::Parser->new;
     $parser->add_row_event_handler(sub {
-        my ($row) = @_;
+        my ($row, $rowDetail) = @_;
+        # array of cell values in parsed row
         print Dumper $row;
+        # array of hashes with cell details (reference, value, column, row, style, etc.) in parsed row
+        print Dumper $rowDetail;
     });
     $parser->open('foo.xlsx');
     
     # parse sheet with sheet name
-    $parser->sheet_by_rid( $parser->workbook->sheet_id( 'Sheet1' ) );
+    $parser->sheet_by_rid( $parser->workbook->sheet_rid( 'Sheet1' ) );
     
-    # .. or parse sheet with r:Id
-    $parser->sheet_by_rid(3);
+    # .. or parse sheet with sheet Id
+    $parser->sheet_by_id(1);
 
 # DESCRIPTION
 
 Data::XLSX::Parser provides faster way to parse Microsoft Excel's .xlsx files.
 The implementation of this module is highly inspired from Python's FastXLSX library.
 
-This is SAX based parser, so you can parse very large XLSX file with lower memory usage.
-
-# THIS MODULE IS \*ALPHA\* QUALITY
-
-This module is created for my current daily work that needs convert very huge excel file to csv, and perfectly work against my files but might not to all excel datas.
-
-If you have some XSLX files that doesn't parse this module, please bug me with the files.
+The module uses a SAX based parser, so you can parse very large XLSX file with lower memory usage.
 
 # METHODS
 
@@ -39,7 +36,52 @@ If you have some XSLX files that doesn't parse this module, please bug me with t
 
 Create new parser object.
 
-## add
+## add_row_event_handler
+
+Add sub reference to row handler. Two arguments are returned, the first is an array with the cell values of the parsed row, the second is an array of hashes with the details of the parsed row cells:
+
+    |key |Content  
+    -------------------------
+    | i  |STYLE_INDEX        
+    | s  |STYLE OF CELL      
+    | f  |FORMAT OF CELL     
+    | r  |REFERENCE          
+    | c  |COLUMN OF CELL     
+    | v  |VALUE OF CELL      
+    | t  |TYPE OF CELL       
+    | s  |TYPE_SHARED_STRING 
+    | g  |GENERATED_CELL     
+    | row|ROW OF CELL        
+
+Cell values are returned 'as is', except date values (where the format tag indicates this) are converted to epoch values.
+
+## open
+
+Open a workbook to be parsed.
+
+## sheet_by_id
+
+Start parsing of sheet identified by sheet Id.
+
+## sheet_by_rid
+
+Start parsing of sheet identified by sheet relation Id.
+
+## workbook
+
+returns the Data::XLSX::Parser::Workbook object (representation of xl/workbook.xml, used to get sheets).
+
+## shared_strings
+
+returns the Data::XLSX::Parser::SharedStrings object (representation of xl/sharedStrings.xml).
+
+## styles
+
+returns the Data::XLSX::Parser::Styles object (representation of xl/styles.xml).
+
+## relationships
+
+returns the Data::XLSX::Parser::Relationships object (representation of xl/_rels/workbook.xml.rels).
 
 # AUTHOR
 
