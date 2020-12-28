@@ -44,10 +44,10 @@ sub new {
 
     }, $class;
 
-    my $fh = File::Temp->new( SUFFIX => '.xml' ) or confess "couldn't create tempfile $!";
+    my $fh = File::Temp->new( SUFFIX => '.xml' ) or confess "couldn't create tempfile: $!";
 
-    my $handle = $archive->sheet($filepath) or confess "couldn't get handle to sheet archive $filepath $!";
-    confess 'Failed to write temporally file: ', $fh->filename
+    my $handle = $archive->sheet($filepath) or confess "couldn't get handle to sheet archive $filepath: $!";
+    confess 'Failed to write temporary file: ', $fh->filename
         unless $handle->extractToFileNamed($fh->filename) == Archive::Zip::AZ_OK;
 
     my $parser = XML::Parser::Expat->new(Namespaces=>1);
@@ -189,3 +189,18 @@ sub _parse_rel {
 }
 
 1;
+__END__
+
+=head1 NAME
+
+Data::XLSX::Parser::Sheet - Sheet class of Data::XLSX::Parser
+
+=head1 DESCRIPTION
+
+Data::XLSX::Parser::Sheet parses the cells in a sheet and invokes the _row_event method from the main parser object to return the processed row.
+
+=head1 AUTHOR
+
+Daisuke Murase <typester@cpan.org>
+
+=cut

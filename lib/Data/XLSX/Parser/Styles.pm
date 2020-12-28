@@ -74,10 +74,10 @@ sub new {
         _current_style => undef,
     }, $class;
 
-    my $fh = File::Temp->new( SUFFIX => '.xml' ) or confess "couldn't create tempfile $!";
+    my $fh = File::Temp->new( SUFFIX => '.xml' ) or confess "couldn't create temporary file: $!";
 
-    my $handle = $archive->styles or confess "couldn't get handle to styles archive $!";
-    confess 'Failed to write temporally file: ', $fh->filename
+    my $handle = $archive->styles or confess "couldn't get handle to styles archive: $!";
+    confess 'Failed to write temporary file: ', $fh->filename
         unless $handle->extractToFileNamed($fh->filename) == Archive::Zip::AZ_OK;
 
     my $parser = XML::Parser::Expat->new(Namespaces=>1);
@@ -181,3 +181,32 @@ sub _parse_format_code_type {
 }
 
 1;
+__END__
+
+=head1 NAME
+
+Data::XLSX::Parser::Styles - Styles class of Data::XLSX::Parser
+
+=head1 DESCRIPTION
+
+Data::XLSX::Parser::Styles parses the styles of the workbook and provides methods to get the cell style from the passed style id, convert the style to a type (float, int, datetime.date, etc.) and convert the style to a format string.
+
+=head1 METHODS
+
+=head2 cell_style
+
+get the cell style from the current cell's style id.
+
+=head2 cell_type_from_style
+
+convert the style to a type (float, int, datetime.date, etc.).
+
+=head2 cell_format_from_style
+
+convert the style to a builtin format string.
+
+=head1 AUTHOR
+
+Daisuke Murase <typester@cpan.org>
+
+=cut

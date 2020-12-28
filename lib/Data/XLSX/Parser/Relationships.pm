@@ -14,7 +14,7 @@ sub new {
         _relationships => {}, # { <rid> => {Target => "...", Type => "..."}, ... }
     }, $class;
 
-    my $fh = File::Temp->new( SUFFIX => '.xml.rels') or croak "couldn't create tempfile $!";
+    my $fh = File::Temp->new( SUFFIX => '.xml.rels') or confess "couldn't create tempfile $!";
 
     my $handle = $archive->relationships or confess "couldn't get handle to relationships archive $!";
     confess 'Failed to write temporary file: ', $fh->filename
@@ -74,3 +74,28 @@ sub _end {
 }
 
 1;
+__END__
+
+=head1 NAME
+
+Data::XLSX::Parser::Relationships - Relationships class of Data::XLSX::Parser
+
+=head1 DESCRIPTION
+
+Data::XLSX::Parser::Relationships parses the Relationships of the workbook and provides methods to check whether the relation of the passed relation id exists and to return the target path stored in the relation.
+
+=head1 METHODS
+
+=head2 relation
+
+checks whether passed relation id exists in relationships.
+
+=head2 relation_target
+
+returns the target path of the passed relation id.
+
+=head1 AUTHOR
+
+Daisuke Murase <typester@cpan.org>
+
+=cut
