@@ -4,7 +4,9 @@ Data::XLSX::Parser - faster XLSX parser
 
 # SYNOPSIS
 
-   use Data::Dumper;
+
+```perl
+    use Data::Dumper;
     use Data::XLSX::Parser;
     
     my $parser = Data::XLSX::Parser->new;
@@ -22,10 +24,11 @@ Data::XLSX::Parser - faster XLSX parser
     
     # .. or parse sheet with sheet Id
     $parser->sheet_by_id(1);
+```
 
 # DESCRIPTION
 
-Data::XLSX::Parser provides faster way to parse Microsoft Excel's .xlsx files.
+Data::XLSX::Parser provides a fast way to parse Microsoft Excel's .xlsx files.
 The implementation of this module is highly inspired from Python's FastXLSX library.
 
 The module uses a SAX based parser, so you can parse very large XLSX file with lower memory usage.
