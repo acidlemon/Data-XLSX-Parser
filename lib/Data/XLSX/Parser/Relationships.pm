@@ -34,7 +34,7 @@ sub relation_target {
     my ($self, $rid) = @_;
 
     unless (exists $self->{_relationships}->{$rid}) {
-		confess "relation ID $rid not found in relationships!";
+        confess "relation ID $rid not found in relationships!";
         return;
     }
 
@@ -47,7 +47,7 @@ sub relation {
     my ($self, $rid) = @_;
 
     unless (exists $self->{_relationships}->{$rid}) {
-		confess "relation ID $rid not found in relationships!";
+        confess "relation ID $rid not found in relationships!";
         return;
     }
 
