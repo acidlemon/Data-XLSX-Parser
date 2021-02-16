@@ -26,7 +26,9 @@ $parser->add_row_event_handler(sub {
 });
 
 $parser->sheet_by_id(1);
+is $cells->[112][0], 'RCS Thrust Vector Uncertainties ', 'val ok';
 
+$parser->sheet_by_rid( $parser->workbook->sheet_id( $sheets[0] ) );
 is $cells->[112][0], 'RCS Thrust Vector Uncertainties ', 'val ok';
 
 done_testing;

@@ -114,6 +114,40 @@ Data::XLSX::Parser - faster XLSX parser
     
     # .. or parse sheet with sheet Id
     $parser->sheet_by_id(1);
+    
+    # -----------
+    # print values of all sheets on the commandline
+    use Text::ASCIITable;
+    
+    # get names of all sheets in the workbook
+    my @rows;
+    
+    my $xlsx_parser = Data::XLSX::Parser->new;
+    $xlsx_parser->add_row_event_handler( sub{
+        push @rows, $_[0];
+    });
+    
+    $xlsx_parser->open( 'test.xlsx' );
+    my @names = $xlsx_parser->workbook->names;
+    
+    for my $name ( @names ) {
+        say "Table $name:";
+    
+        my $table = Text::ASCIITable->new;
+        my $rid   = $xlsx_parser->workbook->sheet_id( $name );
+        $xlsx_parser->sheet_by_rid( $rid );
+    
+        my $headers = shift @rows;
+        $table->setCols( @{ $headers || [] } );
+    
+        for my $row ( @rows ) {
+            $table->addRow( @{ $row || [] } );
+        }
+        
+        print $table;
+    
+        @rows = ();
+    }
 
 =head1 DESCRIPTION
 
