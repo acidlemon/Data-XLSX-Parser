@@ -30,7 +30,7 @@ $parser->add_row_event_handler(sub {
 });
 
 my $name = ( $parser->workbook->names )[0];
-my $rid  = $parser->workbook->sheet_id( $name );
+my $rid  = $parser->workbook->sheet_rid( $name );
 $parser->sheet_by_rid( $rid );
 
 ok $i, 'callback running ok';
