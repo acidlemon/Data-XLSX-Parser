@@ -40,8 +40,7 @@ sub sheet_id {
         or return;
 
     if ($meta->{'r:id'}) {
-        (my $r = $meta->{'r:id'}) =~ s/^rId//;
-        return $r;
+        return $meta->{'r:id'};
     }
     else {
         return $meta->{sheetId};
