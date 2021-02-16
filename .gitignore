@@ -15,3 +15,7 @@ private-*
 .DS_Store
 local/
 cpanfile.snapshot
+/t/runSingleTest.cmd
+/t/runAllTests.cmd
+/xt/runSingleTest.cmd
+/xt/runAllTests.cmd
