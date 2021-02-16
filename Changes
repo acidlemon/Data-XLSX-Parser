@@ -2,6 +2,8 @@ Revision history for Perl extension Data-XLSX-Parser
 
 {{$NEXT}}
 
+0.20 2021-02-16T10:32:42Z
+
     - bug fix: Fix 1 second misalignment of time about rounding timestamp.
     - improvement: Now row_event_handler gets 2nd args as row detail information.
     - improvement: Documents and Pods are more fulfilled.
