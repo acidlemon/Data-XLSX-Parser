@@ -4,8 +4,6 @@ Data::XLSX::Parser - faster XLSX parser
 
 # SYNOPSIS
 
-
-```perl
     use Data::Dumper;
     use Data::XLSX::Parser;
     
@@ -24,7 +22,40 @@ Data::XLSX::Parser - faster XLSX parser
     
     # .. or parse sheet with sheet Id
     $parser->sheet_by_id(1);
-```
+    
+    # -----------
+    # print values of all sheets on the commandline
+    use Text::ASCIITable;
+    
+    # get names of all sheets in the workbook
+    my @rows;
+    
+    my $xlsx_parser = Data::XLSX::Parser->new;
+    $xlsx_parser->add_row_event_handler( sub{
+        push @rows, $_[0];
+    });
+    
+    $xlsx_parser->open( 'test.xlsx' );
+    my @names = $xlsx_parser->workbook->names;
+    
+    for my $name ( @names ) {
+        say "Table $name:";
+    
+        my $table = Text::ASCIITable->new;
+        my $rid   = $xlsx_parser->workbook->sheet_id( $name );
+        $xlsx_parser->sheet_by_rid( $rid );
+    
+        my $headers = shift @rows;
+        $table->setCols( @{ $headers || [] } );
+    
+        for my $row ( @rows ) {
+            $table->addRow( @{ $row || [] } );
+        }
+        
+        print $table;
+    
+        @rows = ();
+    }
 
 # DESCRIPTION
 
@@ -39,7 +70,7 @@ The module uses a SAX based parser, so you can parse very large XLSX file with l
 
 Create new parser object.
 
-## add_row_event_handler
+## add\_row\_event\_handler
 
 Add sub reference to row handler. Two arguments are returned, the first is an array with the cell values of the parsed row, the second is an array of hashes with the details of the parsed row cells:
 
@@ -62,11 +93,11 @@ Cell values are returned 'as is', except date values (where the format tag indic
 
 Open a workbook to be parsed.
 
-## sheet_by_id
+## sheet\_by\_id
 
 Start parsing of sheet identified by sheet Id.
 
-## sheet_by_rid
+## sheet\_by\_rid
 
 Start parsing of sheet identified by sheet relation Id.
 
@@ -74,7 +105,7 @@ Start parsing of sheet identified by sheet relation Id.
 
 returns the Data::XLSX::Parser::Workbook object (representation of xl/workbook.xml, used to get sheets).
 
-## shared_strings
+## shared\_strings
 
 returns the Data::XLSX::Parser::SharedStrings object (representation of xl/sharedStrings.xml).
 
@@ -84,8 +115,8 @@ returns the Data::XLSX::Parser::Styles object (representation of xl/styles.xml).
 
 ## relationships
 
-returns the Data::XLSX::Parser::Relationships object (representation of xl/_rels/workbook.xml.rels).
+returns the Data::XLSX::Parser::Relationships object (representation of xl/\_rels/workbook.xml.rels).
 
 # AUTHOR
 
-Daisuke Murase &lt;typester@cpan.org>
+Daisuke Murase <typester@cpan.org>

@@ -25,8 +25,8 @@ sub workbook {
 
 sub sheet {
     my ($self, $path) = @_;
-	# only add xl/ if not already there, as some tools add absolute paths in relations
-	$path = sprintf ('xl/%s', $path) unless $path =~ /^xl\//;
+    # only add xl/ if not already there, as some tools add absolute paths in relations
+    $path = sprintf ('xl/%s', $path) unless $path =~ /^xl\//;
     $self->{_zip}->memberNamed($path);
 }
 

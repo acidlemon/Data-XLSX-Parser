@@ -34,7 +34,7 @@ SKIP: {
         $output .= "Table $name:\n";
     
         my $table = Text::ASCIITable->new;
-        my $rid   = $xlsx_parser->workbook->sheet_id( $name );
+        my $rid   = $xlsx_parser->workbook->sheet_rid( $name );
         $xlsx_parser->sheet_by_rid( $rid );
     
         my $headers = shift @rows;

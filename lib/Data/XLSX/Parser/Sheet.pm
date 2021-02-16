@@ -151,41 +151,41 @@ sub _char {
 }
 
 sub _parse_rel {
-	my ($self, $cell) = @_;
+    my ($self, $cell) = @_;
 
-	my ($column, $row);
-	my $v;
-	if ($cell->{ REF() }) {
-		($column, $row) = $cell->{ REF() } =~ /([A-Z]+)(\d+)/;
-		$v = 0;
-		my $i = 0;
-		for my $ch (split '', $column) {
-			my $s = length($column) - $i++ - 1;
-			$v += (ord($ch) - ord('A') + 1) * (26**$s);
-		}
-		$cell->{ row } = $row + 0;
-		if ($cell->{ COLUMN() } > $v) {
-			carp sprintf 'Detected smaller index than current cell, something is wrong! (row %s): %s <> %s', $row, $v, $cell->{ COLUMN() };
-		}
-	} else {
-		# fallback if REF() not defined
-		$v = $cell->{ COLUMN() };
-		$row = $self->{_row_count}+1;
-		$cell->{ row } = $row;
-	}
+    my ($column, $row);
+    my $v;
+    if ($cell->{ REF() }) {
+        ($column, $row) = $cell->{ REF() } =~ /([A-Z]+)(\d+)/;
+        $v = 0;
+        my $i = 0;
+        for my $ch (split '', $column) {
+            my $s = length($column) - $i++ - 1;
+            $v += (ord($ch) - ord('A') + 1) * (26**$s);
+        }
+        $cell->{ row } = $row + 0;
+        if ($cell->{ COLUMN() } > $v) {
+            carp sprintf 'Detected smaller index than current cell, something is wrong! (row %s): %s <> %s', $row, $v, $cell->{ COLUMN() };
+        }
+    } else {
+        # fallback if REF() not defined
+        $v = $cell->{ COLUMN() };
+        $row = $self->{_row_count}+1;
+        $cell->{ row } = $row;
+    }
 
-	# add omitted cells as empty...
-	for ($cell->{ COLUMN() } .. $v-1) {
-		push @{ $self->{_current_row} }, {
-			GENERATED_CELL() => 1,
-			STYLE_IDX()      => undef,
-			TYPE()           => undef,
-			REF()            => [ $_, $row ],
-			COLUMN()         => $_,
-			VALUE()          => '',
-			FMT()            => 'unicode',
-		};
-	}
+    # add omitted cells as empty...
+    for ($cell->{ COLUMN() } .. $v-1) {
+        push @{ $self->{_current_row} }, {
+            GENERATED_CELL() => 1,
+            STYLE_IDX()      => undef,
+            TYPE()           => undef,
+            REF()            => [ $_, $row ],
+            COLUMN()         => $_,
+            VALUE()          => '',
+            FMT()            => 'unicode',
+        };
+    }
 }
 
 1;
