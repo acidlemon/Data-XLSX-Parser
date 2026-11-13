@@ -77,6 +77,10 @@ sub _start {
         };
     } elsif ($name eq 'v') {
         $self->{_is_value} = 1;
+    } elsif ($name eq 'is') {
+        $self->{_is_inlinestring} = 1;
+    } elsif ($name eq 't' and $self->{_is_inlinestring}) {
+        $self->{_is_value} = 1;
     }
 }
 
@@ -114,6 +118,8 @@ sub _end {
             } elsif (Scalar::Util::looks_like_number($v)) {
                 $c->{ VALUE() } = $v + 0;
             }
+        } elsif ($c->{ TYPE() } eq "inlineStr") {
+            $c->{ VALUE() } = $self->{_inlinestring};
         } else {
             if (!defined $v) {
                 $c->{ VALUE() } = '';
@@ -127,8 +133,16 @@ sub _end {
 
         $self->{_data} = '';
         $self->{_cell} = undef;
+        $self->{_inlinestring} = undef;
+        $self->{_potential_inlinestring} = undef;
     } elsif ($name eq 'v') {
         $self->{_is_value} = 0;
+    } elsif ($name eq 't' and $self->{_is_inlinestring}) {
+        $self->{_potential_inlinestring} = $self->{_data};
+        $self->{_is_value} = 0;
+    } elsif ($name eq 'is') {
+        $self->{_inlinestring} = $self->{_potential_inlinestring};
+        $self->{_is_inlinestring} = 0;
     }
 }
 
